@@ -9,7 +9,7 @@ Demo: https://jsbin.com/yejehog/edit?html,js,output
 
 ### Mounting
 ```js
-import { Sortable, Swap } from 'sortablejs/modular/sortable.core.esm';
+import { Sortable, Swap } from '@ajdorfman93/sortablejs/modular/sortable.core.esm';
 
 Sortable.mount(new Swap());
 ```

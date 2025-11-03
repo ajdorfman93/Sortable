@@ -54,36 +54,36 @@ Demo: http://sortablejs.github.io/Sortable/
 
 Install with NPM:
 ```bash
-npm install sortablejs --save
+npm install @ajdorfman93/sortablejs --save
 ```
 
 Install with Bower:
 ```bash
-bower install --save sortablejs
+bower install --save @ajdorfman93/sortablejs
 ```
 
 Import into your project:
 ```js
 // Default SortableJS
-import Sortable from 'sortablejs';
+import Sortable from '@ajdorfman93/sortablejs';
 
 // Core SortableJS (without default plugins)
-import Sortable from 'sortablejs/modular/sortable.core.esm.js';
+import Sortable from '@ajdorfman93/sortablejs/modular/sortable.core.esm.js';
 
 // Complete SortableJS (with all plugins)
-import Sortable from 'sortablejs/modular/sortable.complete.esm.js';
+import Sortable from '@ajdorfman93/sortablejs/modular/sortable.complete.esm.js';
 ```
 
 Cherrypick plugins:
 ```js
 // Cherrypick extra plugins
-import Sortable, { MultiDrag, Swap } from 'sortablejs';
+import Sortable, { MultiDrag, Swap } from '@ajdorfman93/sortablejs';
 
 Sortable.mount(new MultiDrag(), new Swap());
 
 
 // Cherrypick default plugins
-import Sortable, { AutoScroll } from 'sortablejs/modular/sortable.core.esm.js';
+import Sortable, { AutoScroll } from '@ajdorfman93/sortablejs/modular/sortable.core.esm.js';
 
 Sortable.mount(new AutoScroll());
 ```
