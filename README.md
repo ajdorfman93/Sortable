@@ -62,6 +62,11 @@ Install with Bower:
 bower install --save @ajdorfman93/sortablejs
 ```
 
+Publish to NPM:
+```bash
+npm publish --access public
+```
+
 Import into your project:
 ```js
 // Default SortableJS
