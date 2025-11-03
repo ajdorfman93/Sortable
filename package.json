@@ -29,12 +29,11 @@
 		"test": "node ./scripts/test.js"
 	},
 	"maintainers": [
-		"Konstantin Lebedev <ibnRubaXa@gmail.com>",
-		"Owen Mills <owen23355@gmail.com>"
+		"Alec Dorfman <dorfmanart@gmail.com>"
 	],
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/SortableJS/Sortable.git"
+		"url": "git://github.com/ajdorfman93/Sortable.git"
 	},
 	"files": [
 		"Sortable.js",
