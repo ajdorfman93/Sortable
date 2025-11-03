@@ -4,9 +4,11 @@ import { RemoveOnSpill, RevertOnSpill } from '../plugins/OnSpill';
 // Extra
 import Swap from '../plugins/Swap';
 import MultiDrag from '../plugins/MultiDrag';
+import Resize from '../plugins/Resize';
 
 Sortable.mount(new AutoScroll());
 Sortable.mount(RemoveOnSpill, RevertOnSpill);
+Sortable.mount(new Resize());
 
 export default Sortable;
 
@@ -15,5 +17,6 @@ export {
 
 	// Extra
 	Swap,
-	MultiDrag
+	MultiDrag,
+	Resize
 };

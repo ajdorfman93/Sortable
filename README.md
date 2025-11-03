@@ -753,6 +753,7 @@ Mounts a plugin to Sortable.
 #### Default Plugins (included in default versions)
  - [AutoScroll](https://github.com/SortableJS/Sortable/tree/master/plugins/AutoScroll)
  - [OnSpill](https://github.com/SortableJS/Sortable/tree/master/plugins/OnSpill)
+ - [Resize](https://github.com/SortableJS/Sortable/tree/master/plugins/Resize)
 
 
 ---

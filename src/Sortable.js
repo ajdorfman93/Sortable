@@ -470,6 +470,21 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 			originalTarget = evt.target.shadowRoot && ((evt.path && evt.path[0]) || (evt.composedPath && evt.composedPath()[0])) || target,
 			filter = options.filter;
 
+		let pointerDownEvent = {
+			evt,
+			originalTarget,
+			target
+		};
+
+		pluginEvent('pointerDown', this, pointerDownEvent);
+
+		if (Sortable.eventCanceled) {
+			return;
+		}
+
+		originalTarget = pointerDownEvent.originalTarget || originalTarget;
+		target = pointerDownEvent.target || target;
+
 		_saveInputCheckedState(el);
 
 
