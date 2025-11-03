@@ -426,6 +426,7 @@ function ResizePlugin() {
 				if (active.direction.horizontal === -1) {
 					active.el.style.marginLeft = marginLeft + 'px';
 				}
+				this._applyTableColumnWidth(active.el, width);
 			}
 
 			if (active.direction.vertical) {
@@ -441,6 +442,86 @@ function ResizePlugin() {
 			active.lastDeltaY = deltaY;
 
 			this._emitResize('resize', evt, width, height, deltaX, deltaY);
+		},
+
+		_applyTableColumnWidth(el, width) {
+			if (!el || width == null) return;
+
+			const cell = closest(el, 'th,td');
+			if (!cell || cell.colSpan > 1) return;
+
+			const table = closest(cell, 'table');
+			if (!table) return;
+
+			const row = closest(cell, 'tr');
+			if (!row) return;
+
+			let columnIndex = 0;
+			let found = false;
+			for (let i = 0; i < row.cells.length; i++) {
+				const current = row.cells[i];
+				const span = current.colSpan || 1;
+				if (current === cell) {
+					if (span !== 1) return;
+					found = true;
+					break;
+				}
+				columnIndex += span;
+			}
+			if (!found) return;
+
+			const pxWidth = width + 'px';
+			const applyToRow = targetRow => {
+				if (!targetRow || !targetRow.cells || !targetRow.cells.length) return;
+				let position = 0;
+				for (let i = 0; i < targetRow.cells.length; i++) {
+					const current = targetRow.cells[i];
+					const span = current.colSpan || 1;
+					if (columnIndex >= position && columnIndex < position + span) {
+						if (span === 1) {
+							current.style.width = pxWidth;
+						}
+						break;
+					}
+					position += span;
+				}
+			};
+
+			const sections = [];
+			if (table.tHead) sections.push(table.tHead);
+			if (table.tBodies) {
+				for (let i = 0; i < table.tBodies.length; i++) {
+					sections.push(table.tBodies[i]);
+				}
+			}
+			if (table.tFoot) sections.push(table.tFoot);
+
+			for (let i = 0; i < sections.length; i++) {
+				const section = sections[i];
+				if (!section || !section.rows) continue;
+				for (let j = 0; j < section.rows.length; j++) {
+					applyToRow(section.rows[j]);
+				}
+			}
+
+			const colGroups = table.getElementsByTagName('colgroup');
+			if (!colGroups || !colGroups.length) return;
+
+			let position = 0;
+			for (let i = 0; i < colGroups.length; i++) {
+				const cols = colGroups[i].children;
+				for (let j = 0; j < cols.length; j++) {
+					const col = cols[j];
+					const span = parseInt(col.getAttribute('span') || '1', 10) || 1;
+					if (columnIndex >= position && columnIndex < position + span) {
+						if (span === 1) {
+							col.style.width = pxWidth;
+						}
+						return;
+					}
+					position += span;
+				}
+			}
 		},
 
 		_onPointerUp(evt) {

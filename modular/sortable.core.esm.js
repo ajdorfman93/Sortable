@@ -3758,6 +3758,7 @@ function ResizePlugin() {
         if (active.direction.horizontal === -1) {
           active.el.style.marginLeft = marginLeft + 'px';
         }
+        this._applyTableColumnWidth(active.el, width);
       }
       if (active.direction.vertical) {
         active.el.style.height = height + 'px';
@@ -3770,6 +3771,76 @@ function ResizePlugin() {
       active.lastDeltaX = deltaX;
       active.lastDeltaY = deltaY;
       this._emitResize('resize', evt, width, height, deltaX, deltaY);
+    },
+    _applyTableColumnWidth: function _applyTableColumnWidth(el, width) {
+      if (!el || width == null) return;
+      var cell = closest(el, 'th,td');
+      if (!cell || cell.colSpan > 1) return;
+      var table = closest(cell, 'table');
+      if (!table) return;
+      var row = closest(cell, 'tr');
+      if (!row) return;
+      var columnIndex = 0;
+      var found = false;
+      for (var i = 0; i < row.cells.length; i++) {
+        var current = row.cells[i];
+        var span = current.colSpan || 1;
+        if (current === cell) {
+          if (span !== 1) return;
+          found = true;
+          break;
+        }
+        columnIndex += span;
+      }
+      if (!found) return;
+      var pxWidth = width + 'px';
+      var applyToRow = function applyToRow(targetRow) {
+        if (!targetRow || !targetRow.cells || !targetRow.cells.length) return;
+        var colPos = 0;
+        for (var j = 0; j < targetRow.cells.length; j++) {
+          var currentCell = targetRow.cells[j];
+          var cellSpan = currentCell.colSpan || 1;
+          if (columnIndex >= colPos && columnIndex < colPos + cellSpan) {
+            if (cellSpan === 1) {
+              currentCell.style.width = pxWidth;
+            }
+            break;
+          }
+          colPos += cellSpan;
+        }
+      };
+      var sections = [];
+      if (table.tHead) sections.push(table.tHead);
+      if (table.tBodies) {
+        for (var _i = 0; _i < table.tBodies.length; _i++) {
+          sections.push(table.tBodies[_i]);
+        }
+      }
+      if (table.tFoot) sections.push(table.tFoot);
+      for (var _i2 = 0; _i2 < sections.length; _i2++) {
+        var section = sections[_i2];
+        if (!section || !section.rows) continue;
+        for (var _j = 0; _j < section.rows.length; _j++) {
+          applyToRow(section.rows[_j]);
+        }
+      }
+      var colGroups = table.getElementsByTagName('colgroup');
+      if (!colGroups || !colGroups.length) return;
+      var groupPos = 0;
+      for (var _i3 = 0; _i3 < colGroups.length; _i3++) {
+        var cols = colGroups[_i3].children;
+        for (var _j2 = 0; _j2 < cols.length; _j2++) {
+          var col = cols[_j2];
+          var spanAttr = parseInt(col.getAttribute('span') || '1', 10) || 1;
+          if (columnIndex >= groupPos && columnIndex < groupPos + spanAttr) {
+            if (spanAttr === 1) {
+              col.style.width = pxWidth;
+            }
+            return;
+          }
+          groupPos += spanAttr;
+        }
+      }
     },
     _onPointerUp: function _onPointerUp(evt) {
       var active = this._activeResize;
